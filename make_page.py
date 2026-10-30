@@ -11,7 +11,7 @@ network never gets published), and writes docs/index.html. The page includes:
   - your answers, from page.yaml
 GitHub Pages then publishes the docs folder (Settings -> Pages -> main, /docs).
 
-Two parts are yours to write: links_section() and mermaid_diagram(). Look for TODO.
+links_section() and mermaid_diagram() generate the link list and diagram from the data.
 """
 import datetime
 import html
@@ -58,7 +58,7 @@ def hosts_section(spec):
 
 
 def links_section(spec):
-    """TODO (assignment): return HTML listing every link in spec["links"].
+    """Return HTML listing every link in spec["links"].
 
     For example, for links [h1, s1] and [s1, s2] return:
         <ul><li>h1 — s1</li><li>s1 — s2</li></ul>
@@ -69,7 +69,7 @@ def links_section(spec):
 
 
 def mermaid_diagram(spec):
-    """TODO (assignment): return Mermaid text that draws the network, built from spec["links"].
+    """Return Mermaid text that draws the network, built from spec["links"].
 
     Mermaid turns text like this into a diagram in the browser:
         graph LR

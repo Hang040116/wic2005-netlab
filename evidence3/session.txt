@@ -1,0 +1,57 @@
+*** Error setting resource limits. Mininet's performance may be affected.
+*** Configuring hosts
+r1 r2 r3 r4 h1 h2 h3 h4 
+*** Starting controller
+
+*** Starting 0 switches
+
+*** Starting CLI:
+Applying routes:
+  r1 ip route add 10.86.16.0/24 via 10.86.12.2
+  r1 ip route add 10.86.32.0/23 via 10.86.41.1
+  r2 ip route add 10.86.0.0/24 via 10.86.12.1
+  r2 ip route add 10.86.32.0/23 via 10.86.23.2
+  r3 ip route add 10.86.0.0/24 via 10.86.23.1
+  r3 ip route add 10.86.16.0/24 via 10.86.23.1
+  r3 ip route add 10.86.33.0/24 via 10.86.34.2
+  r4 ip route add 10.86.0.0/24 via 10.86.41.2
+  r4 ip route add 10.86.16.0/24 via 10.86.34.1
+  r4 ip route add 10.86.32.0/24 via 10.86.34.1
+
+Hosts: h1 10.86.0.10 (via r1), h2 10.86.16.10 (via r2), h3 10.86.32.10 (via r3), h4 10.86.33.10 (via r4) 
+
+mininet> r1 r1-eth0:h1-eth0 r1-eth1:r2-eth1 r1-eth2:r4-eth2
+r2 r2-eth0:h2-eth0 r2-eth1:r1-eth1 r2-eth2:r3-eth1
+r3 r3-eth0:h3-eth0 r3-eth1:r2-eth2 r3-eth2:r4-eth1
+r4 r4-eth0:h4-eth0 r4-eth1:r3-eth2 r4-eth2:r1-eth2
+h1 h1-eth0:r1-eth0
+h2 h2-eth0:r2-eth0
+h3 h3-eth0:r3-eth0
+h4 h4-eth0:r4-eth0
+mininet> PING 10.86.16.10 (10.86.16.10) 56(84) bytes of data.
+64 bytes from 10.86.16.10: icmp_seq=1 ttl=62 time=0.065 ms
+
+--- 10.86.16.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.065/0.065/0.065/0.000 ms
+mininet> PING 10.86.32.10 (10.86.32.10) 56(84) bytes of data.
+64 bytes from 10.86.32.10: icmp_seq=1 ttl=61 time=0.021 ms
+
+--- 10.86.32.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.021/0.021/0.021/0.000 ms
+mininet> PING 10.86.33.10 (10.86.33.10) 56(84) bytes of data.
+64 bytes from 10.86.33.10: icmp_seq=1 ttl=62 time=0.028 ms
+
+--- 10.86.33.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.028/0.028/0.028/0.000 ms
+mininet> mininet> mininet> mininet> mininet> mininet> mininet> mininet> mininet> mininet> mininet> mininet> mininet> mininet> mininet> mininet> mininet> mininet> *** Stopping 0 controllers
+
+*** Stopping 8 links
+........
+*** Stopping 0 switches
+
+*** Stopping 8 hosts
+r1 r2 r3 r4 h1 h2 h3 h4 
+*** Done

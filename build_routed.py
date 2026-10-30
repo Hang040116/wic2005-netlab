@@ -136,7 +136,7 @@ def check_spec(spec):
 
 
 def check_paths(spec):
-    """TODO (assignment): the same job as check_paths() in routers.py, for any network.
+    """Check all host-to-host routes for missing entries and forwarding loops.
 
     For every pair of different hosts, follow the packet from the source host's router,
     using lookup(spec, router, destination) at each router and owner(spec, next_hop) to move

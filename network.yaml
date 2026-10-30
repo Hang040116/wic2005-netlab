@@ -1,4 +1,4 @@
-# network.yaml: your routed network, as data. A starting point to change into your own design.
+# network.yaml: a routed network described as data.
 #
 #   python3 build_routed.py network.yaml      checks it, then builds it in Mininet
 #   python3 make_page3.py network.yaml        checks it, then writes docs/week3/index.html

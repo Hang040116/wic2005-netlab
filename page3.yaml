@@ -34,8 +34,8 @@ answers:
   control_plane:
     question: "In your network, what was the control plane? Who worked out the routes, and what does that mean for a network of 40 routers?"
     answer: >-
-      I acted as the control plane when I calculated the static routes and wrote
-      them into network.yaml; build_routed.py then checked and installed those
+      The static route plan in network.yaml serves as the control-plane decision;
+      build_routed.py then checked and installed those
       decisions. Linux forwarded packets using the resulting tables. For 40
       routers, hand-maintained paths would be hard to keep consistent when links
       fail or addresses change, so a routing protocol or controller would need

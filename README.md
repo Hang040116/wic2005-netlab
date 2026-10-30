@@ -29,4 +29,4 @@ python3 make_page3.py network.yaml
 
 ## AI use
 
-ChatGPT Codex was used at Level 3 (Open) to draft the topology design, validation and page-generation code, written answers, and this README. The student should review the design and answers, run the lab on their own address block, and be able to explain every route, check, and result before submission. The evidence files identify which commands were actually run; no output should be invented.
+ChatGPT Codex was used at Level 3 (Open) to draft the topology design, validation and page-generation code, written answers, and this README. Codex also ran the recorded Mininet experiments in the student's local Docker environment using the student's address block. The evidence files contain actual command output. The student should review the design, repeat the experiments personally, and be able to explain every route, check, and result. This AI use should be recorded on the course AI Declaration Form.

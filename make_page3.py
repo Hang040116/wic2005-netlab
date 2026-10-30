@@ -9,7 +9,7 @@ so a network with a loop or a missing route never gets published, then writes
 docs/week3/index.html with your network, your evidence (evidence3/) and your answers
 (page3.yaml). GitHub Pages publishes it at https://<you>.github.io/<repository>/week3/
 
-One part is yours to write: routing_tables_section(). Look for TODO.
+routing_tables_section() renders the connected and static routes for each router.
 """
 import datetime
 import html
@@ -52,7 +52,7 @@ def links_section(spec):
 
 
 def routing_tables_section(spec):
-    """TODO (assignment): return HTML showing each router's routing table, as the router sees it.
+    """Return HTML showing each router's routing table, as the router sees it.
 
     For each router in spec["routers"], list:
       - its directly connected networks: plan(spec)[router] gives its interfaces;

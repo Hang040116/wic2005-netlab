@@ -8,7 +8,8 @@ docker run -i --rm --privileged -v "$PWD:/lab" -w /lab \
   > evidence/session.txt 2>&1 <<'MININET'
 net
 pingall
-h1 ping -6 -c 1 fd00:3186::2
+h1 ping -6 -c 3 -W 2 fd00:3186::2
+h1 ping -6 -c 1 -W 2 fd00:3186::2
 h1 ip neigh > evidence/neigh.txt
 sh brctl showmacs s1 > evidence/macs.txt
 h2 ip -6 addr add fd00:3186::1/64 dev h2-eth0
@@ -23,10 +24,12 @@ python3 - <<'PY'
 from pathlib import Path
 import re
 log = Path('evidence/session.txt').read_text()
-match = re.search(r'\*\*\* Ping: testing ping reachability.*?\*\*\* Results:.*?(?=\nmininet>)', log, re.S)
+match = re.search(r'\*\*\* Ping: testing ping reachability.*?\*\*\* Results:[^\n]*', log, re.S)
 if match is None or '0% dropped' not in match.group():
     raise SystemExit('Week 2 pingall did not finish with 0% dropped; inspect evidence/session.txt')
 Path('evidence/pingall.txt').write_text(match.group().strip() + '\n')
+if '1 packets transmitted, 1 received' not in log:
+    raise SystemExit('IPv6 h1-to-h2 ping did not succeed; inspect evidence/session.txt')
 for name in ('neigh', 'macs', 'dad'):
     if not Path(f'evidence/{name}.txt').read_text().strip():
         raise SystemExit(f'evidence/{name}.txt is empty')
