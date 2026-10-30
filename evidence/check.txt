@@ -1,0 +1,4 @@
+Fix the description and try again.
+PROBLEM: h6 and h2 both use 10.86.0.2
+PROBLEM: h6 and h2 both use fd00:3186::2
+PROBLEM: link s9–s1 names missing node s9
