@@ -16,10 +16,10 @@ h4 h4-eth0:s2-eth2
 h5 h5-eth0:s3-eth1
 h6 h6-eth0:s3-eth2
 s1 lo:  s1-eth1:h1-eth0 s1-eth2:h2-eth0 s1-eth3:s2-eth3
-s2 lo:  s2-eth1:h3-eth0 s2-eth2:h4-eth0 s2-eth3:s1-eth3 s2-eth4:s3-eth3
+s2 lo:  s2-eth1:h3-eth0 s2-eth2:h4-eth0 s2-eth3:s1-eth3 s2-eth4:mininet> s3-eth3
 s3 lo:  s3-eth1:h5-eth0 s3-eth2:h6-eth0 s3-eth3:s2-eth4
 *** Ping: testing ping reachability
-h1 -> mininet> h2 h3 h4 h5 h6 
+h1 -> h2 h3 h4 h5 h6 
 h2 -> h1 h3 h4 h5 h6 
 h3 -> h1 h2 h4 h5 h6 
 h4 -> h1 h2 h3 h5 h6 
@@ -27,18 +27,18 @@ h5 -> h1 h2 h3 h4 h6
 h6 -> h1 h2 h3 h4 mininet> h5 
 *** Results: 0% dropped (30/30 received)
 PING fd00:3186::2 (fd00:3186::2) 56 data bytes
-64 bytes from fd00:3186::2: icmp_seq=3 ttl=64 time=0.033 ms
+64 bytes from fd00:3186::2: icmp_seq=3 ttl=64 time=0.045 ms
 
 --- fd00:3186::2 ping statistics ---
-3 packets transmitted, 1 received, 66.6667% packet loss, time 2031ms
-rtt min/avg/max/mdev = 0.033/0.033/0.033/0.000 ms
+3 packets transmitted, 1 received, 66.6667% packet loss, time 2036ms
+rtt min/avg/max/mdev = 0.045/0.045/0.045/0.000 ms
 mininet> PING fd00:3186::2 (fd00:3186::2) 56 data bytes
-mininet> 64 bytes from fd00:3186::2: icmp_seq=1 ttl=64 time=0.027 ms
+64 bytes from fd00:3186::2: icmp_seq=1 ttl=64 time=0.037 ms
 
 --- fd00:3186::2 ping statistics ---
 1 packets transmitted, 1 received, 0% packet loss, time 0ms
-rtt min/avg/max/mdev = 0.027/0.027/0.027/0.000 ms
-mininet> mininet> mininet> mininet> mininet> mininet> mininet> *** Stopping 0 controllers
+rtt min/avg/max/mdev = 0.037/0.037/0.037/0.000 ms
+mininet> mininet> mininet> mininet> mininet> mininet> mininet> mininet> *** Stopping 0 controllers
 
 *** Stopping 8 links
 ........
