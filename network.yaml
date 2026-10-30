@@ -1,0 +1,64 @@
+# network.yaml: your routed network, as data. A starting point to change into your own design.
+#
+#   python3 build_routed.py network.yaml      checks it, then builds it in Mininet
+#   python3 make_page3.py network.yaml        checks it, then writes docs/week3/index.html
+#
+# Address block for student ID suffix 3186: 10.86.0.0/16.
+#
+# Each LAN has one router (.1 on the LAN) and one host (.10).
+# On each link, the first router named is .1 and the second is .2.
+# Four-router ring. The .32 and .33 LANs can be summarized as .32.0/23.
+
+student_id_last4: "3186"
+
+routers: [r1, r2, r3, r4]
+
+lans:
+  - name: lan-h1
+    network: 10.86.0.0/24
+    router: r1
+    host: h1
+  - name: lan-h2
+    network: 10.86.16.0/24
+    router: r2
+    host: h2
+  - name: lan-h3
+    network: 10.86.32.0/24
+    router: r3
+    host: h3
+  - name: lan-h4
+    network: 10.86.33.0/24
+    router: r4
+    host: h4
+
+links:
+  - [r1, r2, 10.86.12.0/30]
+  - [r2, r3, 10.86.23.0/30]
+  - [r3, r4, 10.86.34.0/30]
+  - [r4, r1, 10.86.41.0/30]
+
+routes:
+  r1:
+    - to: 10.86.16.0/24
+      via: 10.86.12.2
+    - to: 10.86.32.0/23
+      via: 10.86.41.1
+  r2:
+    - to: 10.86.0.0/24
+      via: 10.86.12.1
+    - to: 10.86.32.0/23
+      via: 10.86.23.2
+  r3:
+    - to: 10.86.0.0/24
+      via: 10.86.23.1
+    - to: 10.86.16.0/24
+      via: 10.86.23.1
+    - to: 10.86.33.0/24
+      via: 10.86.34.2
+  r4:
+    - to: 10.86.0.0/24
+      via: 10.86.41.2
+    - to: 10.86.16.0/24
+      via: 10.86.34.1
+    - to: 10.86.32.0/24
+      via: 10.86.34.1
