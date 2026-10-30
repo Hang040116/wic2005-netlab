@@ -1,0 +1,43 @@
+# topology.yaml — a small network described as data.
+# build_topo.py reads this file and creates exactly this network in Mininet.
+#
+# Make it yours first (see "Your addresses" in the lab):
+# Address block for student ID suffix 3186: IPv4 10.86.0.0/16, IPv6 fd00:3186::/32.
+
+student_id_last4: "3186"
+
+switches:
+  - s1
+  - s2
+  - s3
+
+hosts:
+  - name: h1
+    ip: 10.86.0.1/24
+    ipv6: fd00:3186::1/64
+  - name: h2
+    ip: 10.86.0.2/24
+    ipv6: fd00:3186::2/64
+  - name: h3
+    ip: 10.86.0.3/24
+    ipv6: fd00:3186::3/64
+  - name: h4
+    ip: 10.86.0.4/24
+    ipv6: fd00:3186::4/64
+  - name: h5
+    ip: 10.86.0.5/24
+    ipv6: fd00:3186::5/64
+  - name: h6
+    ip: 10.86.0.6/24
+    ipv6: fd00:3186::6/64
+
+# Each link joins two nodes.
+links:
+  - [h1, s1]
+  - [h2, s1]
+  - [h3, s2]
+  - [h4, s2]
+  - [h5, s3]
+  - [h6, s3]
+  - [s1, s2]
+  - [s2, s3]
