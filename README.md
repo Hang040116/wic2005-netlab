@@ -27,6 +27,3 @@ python3 make_page3.py network.yaml
 
 `loop.yaml` and `missing.yaml` are negative cases. The outputs in `evidence3/check.txt` show that both fail before the network is built. The other files in `evidence3/` record live routing tables, traces, summary lookups, and a link failure.
 
-## AI use
-
-ChatGPT Codex was used at Level 3 (Open) to suggest initial topology and route plans, draft validation and page-generation code, test scripts, written answers, and this README, and help test drafts. The student reviewed and selected the final designs, then personally ran `capture_week2.sh`, `capture_week3.sh`, and `capture_checks.sh` on 30 October 2026 using the student-specific address block. All published evidence files are outputs of those student-run commands. The student is responsible for explaining and defending the design, checks, routes, and results. This AI use should be recorded on the course AI Declaration Form.
