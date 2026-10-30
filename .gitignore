@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+.DS_Store
+starter/
+*-run.log
+COURSE_PLAN.md

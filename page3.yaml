@@ -1,0 +1,42 @@
+# page3.yaml: the words on your Week 3 page. make_page3.py puts each answer under its question.
+# A few sentences each, in your own words, about YOUR network and YOUR evidence.
+# Leave a blank line between paragraphs. Never put your name or full student ID here.
+
+repository: https://github.com/Hang040116/wic2005-netlab
+
+answers:
+  design:
+    question: "Describe your design: why these routers, LANs and links, and how you chose the addresses."
+    answer: >-
+      Four routers form a ring, with one host on each router's LAN. The ring gives
+      two physical paths between routers, while the static routes deliberately
+      choose one. The LANs use 10.86.0.0/24, 10.86.16.0/24,
+      10.86.32.0/24 and 10.86.33.0/24 inside my 10.86.0.0/16 block. Separate /30
+      networks number the four router links. This layout makes the difference
+      between physical redundancy and a usable backup route visible.
+  summary:
+    question: "Which route summarises several LANs? Which networks does it cover, why is it correct, and what else would it attract if you added a network inside its range?"
+    answer: >-
+      On r1 and r2, 10.86.32.0/23 covers the h3 and h4 LANs, 10.86.32.0/24
+      and 10.86.33.0/24, without covering h1 or h2. r1 sends that summary to r4;
+      r2 sends it to r3. The destination router's connected /24 wins by longest
+      prefix match. If another 10.86.32.x or 10.86.33.x network were added, this
+      summary would attract its traffic too, so it would need a real route beyond
+      the next hop rather than merely matching on paper.
+  failure:
+    question: "When you took a link down, what happened, and why couldn't your routes recover even though another path existed? What would have recovered?"
+    answer: >-
+      When the r1-r4 link goes down, r1's chosen next hop for the
+      10.86.32.0/23 summary is no longer reachable. The ring still has an
+      r1-r2-r3 path, but these static routes do not discover or select it.
+      A routing protocol with failure detection and reconvergence, or a planned
+      backup route with suitable metrics, could restore connectivity.
+  control_plane:
+    question: "In your network, what was the control plane? Who worked out the routes, and what does that mean for a network of 40 routers?"
+    answer: >-
+      I acted as the control plane when I calculated the static routes and wrote
+      them into network.yaml; build_routed.py then checked and installed those
+      decisions. Linux forwarded packets using the resulting tables. For 40
+      routers, hand-maintained paths would be hard to keep consistent when links
+      fail or addresses change, so a routing protocol or controller would need
+      to compute and update them from a current view of the network.

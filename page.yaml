@@ -1,0 +1,59 @@
+# page.yaml: the words on your page, kept as data like everything else.
+# make_page.py puts each answer under its question. A few sentences each, in your own words;
+# leave a blank line between paragraphs. Refer to YOUR network and YOUR evidence.
+# Never put your name or full student ID here: the page is public.
+
+repository: https://github.com/Hang040116/wic2005-netlab
+
+answers:
+  planes:
+    question: "Where are the data, control and management planes in your network?"
+    answer: >-
+      The Linux bridges s1, s2 and s3 forward frames in the data plane using their
+      learned MAC-to-port entries. Their local MAC learning supplies the forwarding
+      decisions in this simple network. The management side is topology.yaml plus
+      build_topo.py: I describe hosts and links once, then the script creates them.
+  learning:
+    question: "How did your switches learn which port leads to each host? Use your MAC table evidence."
+    answer: >-
+      A bridge learns a source MAC on the port where it receives a frame. Traffic
+      between h1 and the hosts behind s2 and s3 makes those entries appear in s1's
+      MAC table. Unknown destinations are flooded until a reply teaches the bridge
+      the return port; the table is evidence of data-plane learning, not a route.
+  kind:
+    question: "Which of the four kinds of programmability is this assignment (a network described as data, then built and documented by scripts)? Why isn't it any of the other three?"
+    answer: >-
+      This is mainly automated configuration management: one structured topology
+      drives a repeatable build and a generated page. It does not change the
+      bridge's packet-processing pipeline, move forwarding decisions to an SDN
+      controller, or configure a device through a schema-based API such as NETCONF.
+  two_am:
+    question: "Week 1's 2 a.m. change on 40 switches: what would be different if those switches were described like your network?"
+    answer: >-
+      I would review one data change in Git, validate the addresses and links,
+      then apply the same tested description repeatedly. That reduces manual
+      differences across 40 switches and leaves a diff and rollback point. I would
+      still stage the rollout and check reachability, since a valid file can encode
+      a bad operational choice.
+  model:
+    question: "What's the difference between your network's data model and its serialisation? Use YAML and JSON as the example."
+    answer: >-
+      The model is the set of switches, hosts, addresses and links and how they
+      relate. YAML and topology.json are two serialisations of that same model:
+      build_topo.py loads either into the same Python structure. JSON drops YAML
+      comments, but that does not change the built network.
+  check:
+    question: "Why is it better to catch bad data in check() than with pingall? What did IPv6 notice about a duplicate address that IPv4 didn't?"
+    answer: >-
+      check() stops a duplicate IPv4 or IPv6 address and a missing link endpoint
+      before Mininet creates a misleading partial network. pingall samples only
+      IPv4 connectivity after the fault is already present, and can miss a duplicate
+      when one host answers first. IPv6 Duplicate Address Detection marks a
+      duplicate as dadfailed; IPv4 accepts the extra address without that check.
+  git:
+    question: "What does your Git history give you that copying files into folders named topology-v2-final wouldn't?"
+    answer: >-
+      Git records each change with a message and an exact diff, so I can see when
+      an address, link or check changed and restore an earlier working state.
+      Folders named v2 or final do not explain which lines changed or preserve a
+      reliable sequence shared with the published repository.
