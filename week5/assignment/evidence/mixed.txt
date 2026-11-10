@@ -1,0 +1,216 @@
+$ python3 topo.py --id 3186 --s2-program tunnel_v1.p4
+*** Compiling tunnel.p4
+*** Compiling tunnel_v1.p4
+*** Error setting resource limits. Mininet's performance may be affected.
+*** Configuring hosts
+h1 h2 h3
+*** Starting controller
+
+*** Starting 2 switches
+s1 s2
+*** s1: 6 table entries added
+*** s2: 6 table entries added
+*** Your hosts: h1 10.86.0.1, h2 10.86.0.2, h3 10.86.0.3
+*** Mixed rollout: s1 runs tunnel.p4, s2 runs tunnel_v1.p4
+*** Ready. Switch logs: logs/s1.txt, logs/s2.txt. What h2 and h3 receive: logs/h2.txt, logs/h3.txt
+*** Starting CLI:
+mininet> $ sh sleep 1
+mininet> mininet> $ h2 timeout 4 tcpdump -c 1 -XX -ni h2-eth0 ether proto 0x1212 > logs/h2cap.txt 2>&1 &
+mininet> [2] 112
+mininet> $ sh sleep 0.7
+mininet> mininet> $ h1 python3 send.py 10.86.0.3 mixed-delivery-a --tunnel 2 --hops 4
+mininet> ###[ Ethernet ]###
+  dst       = ff:ff:ff:ff:ff:ff
+  src       = 00:00:00:00:00:01
+  type      = 0x1212
+###[ MyTunnel ]###
+     proto_id  = 2048
+     dst_id    = 2
+     hops_left = 4
+###[ IP ]###
+        version   = 4
+        ihl       = 5
+        tos       = 0x0
+        len       = 44
+        id        = 1
+        flags     =
+        frag      = 0
+        ttl       = 64
+        proto     = udp
+        chksum    = 0x6611
+        src       = 10.86.0.1
+        dst       = 10.86.0.3
+        \options   \
+###[ UDP ]###
+           sport     = 4321
+           dport     = 4321
+           len       = 24
+           chksum    = 0x9841
+###[ Raw ]###
+              load      = 'mixed-delivery-a'
+
+Sent from h1-eth0.
+mininet> $ sh sleep 1
+mininet> mininet> $ sh cat logs/h2cap.txt logs/h2.txt
+mininet> tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on h2-eth0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+05:48:49.199068 00:00:00:00:00:01 > ff:ff:ff:ff:ff:ff, ethertype Unknown (0x1212), length 63:
+	0x0000:  ffff ffff ffff 0000 0000 0001 1212 0800  ................
+	0x0010:  0002 0345 0000 2c00 0100 0040 1166 110a  ...E..,....@.f..
+	0x0020:  5600 010a 5600 0310 e110 e100 1898 416d  V...V.........Am
+	0x0030:  6978 6564 2d64 656c 6976 6572 792d 61    ixed-delivery-a
+1 packet captured
+1 packet received by filter
+0 packets dropped by kernel
+Listening on h2-eth0...
+Received (tunnelled, dst_id=2, hops_left=3) from 10.86.0.1 to 10.86.0.3, TTL 64: 'mixed-delivery-a'
+mininet> $ sh tail -n 55 logs/s2.txt | grep -E 'parse_myTunnel|parse_ipv4|Updating checksum|myTunnel_forward'
+mininet> Action entry: MyIngress.myTunnel_forward - 2,
+Action entry: MyIngress.myTunnel_forward - 3,
+[05:48:49.193] [bmv2] [D] [thread 88] [0.0] [cxt 0] Parser 'parser' entering state 'parse_myTunnel'
+[05:48:49.193] [bmv2] [D] [thread 88] [0.0] [cxt 0] Parser state 'parse_myTunnel': key is 0800
+[05:48:49.193] [bmv2] [D] [thread 88] [0.0] [cxt 0] Parser 'parser' entering state 'parse_ipv4'
+[05:48:49.193] [bmv2] [D] [thread 88] [0.0] [cxt 0] Parser state 'parse_ipv4' has no switch, going to default next state
+Action entry: MyIngress.myTunnel_forward - 2,
+[05:48:49.195] [bmv2] [D] [thread 88] [0.0] [cxt 0] Action entry is MyIngress.myTunnel_forward - 2,
+[05:48:49.195] [bmv2] [T] [thread 88] [0.0] [cxt 0] Action MyIngress.myTunnel_forward
+[05:48:49.197] [bmv2] [D] [thread 91] [0.0] [cxt 0] Updating checksum 'cksum'
+mininet> $ h2 timeout 4 tcpdump -c 1 -XX -ni h2-eth0 ether proto 0x1212 > logs/h2cap.txt 2>&1 &
+mininet> [3] 130
+mininet> $ sh sleep 0.7
+mininet> mininet> $ h1 python3 send.py 10.86.0.3 mixed-delivery-b --tunnel 2 --hops 5
+mininet> ###[ Ethernet ]###
+  dst       = ff:ff:ff:ff:ff:ff
+  src       = 00:00:00:00:00:01
+  type      = 0x1212
+###[ MyTunnel ]###
+     proto_id  = 2048
+     dst_id    = 2
+     hops_left = 5
+###[ IP ]###
+        version   = 4
+        ihl       = 5
+        tos       = 0x0
+        len       = 44
+        id        = 1
+        flags     =
+        frag      = 0
+        ttl       = 64
+        proto     = udp
+        chksum    = 0x6611
+        src       = 10.86.0.1
+        dst       = 10.86.0.3
+        \options   \
+###[ UDP ]###
+           sport     = 4321
+           dport     = 4321
+           len       = 24
+           chksum    = 0x9840
+###[ Raw ]###
+              load      = 'mixed-delivery-b'
+
+Sent from h1-eth0.
+mininet> $ sh sleep 1
+mininet> mininet> $ sh cat logs/h2cap.txt logs/h2.txt
+mininet> tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on h2-eth0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+05:48:51.410528 00:00:00:00:00:01 > ff:ff:ff:ff:ff:ff, ethertype Unknown (0x1212), length 63:
+	0x0000:  ffff ffff ffff 0000 0000 0001 1212 0800  ................
+	0x0010:  0002 0445 0000 2c00 0100 0040 1066 110a  ...E..,....@.f..
+	0x0020:  5600 010a 5600 0310 e110 e100 1898 406d  V...V.........@m
+	0x0030:  6978 6564 2d64 656c 6976 6572 792d 62    ixed-delivery-b
+1 packet captured
+1 packet received by filter
+0 packets dropped by kernel
+Listening on h2-eth0...
+Received (tunnelled, dst_id=2, hops_left=3) from 10.86.0.1 to 10.86.0.3, TTL 64: 'mixed-delivery-a'
+mininet> $ sh tail -n 55 logs/s2.txt | grep -E 'parse_myTunnel|parse_ipv4|Updating checksum|myTunnel_forward'
+mininet> [05:48:49.195] [bmv2] [D] [thread 88] [0.0] [cxt 0] Action entry is MyIngress.myTunnel_forward - 2,
+[05:48:49.195] [bmv2] [T] [thread 88] [0.0] [cxt 0] Action MyIngress.myTunnel_forward
+[05:48:49.197] [bmv2] [D] [thread 91] [0.0] [cxt 0] Updating checksum 'cksum'
+[05:48:51.409] [bmv2] [D] [thread 88] [1.0] [cxt 0] Parser 'parser' entering state 'parse_myTunnel'
+[05:48:51.409] [bmv2] [D] [thread 88] [1.0] [cxt 0] Parser state 'parse_myTunnel': key is 0800
+[05:48:51.409] [bmv2] [D] [thread 88] [1.0] [cxt 0] Parser 'parser' entering state 'parse_ipv4'
+[05:48:51.409] [bmv2] [D] [thread 88] [1.0] [cxt 0] Parser state 'parse_ipv4' has no switch, going to default next state
+Action entry: MyIngress.myTunnel_forward - 2,
+[05:48:51.409] [bmv2] [D] [thread 88] [1.0] [cxt 0] Action entry is MyIngress.myTunnel_forward - 2,
+[05:48:51.409] [bmv2] [T] [thread 88] [1.0] [cxt 0] Action MyIngress.myTunnel_forward
+[05:48:51.410] [bmv2] [D] [thread 91] [1.0] [cxt 0] Updating checksum 'cksum'
+mininet> $ sh ./p4cli s2 table_dump MyIngress.myTunnel_exact
+mininet> Done
+==========
+TABLE ENTRIES
+**********
+Dumping entry 0x0
+Match key:
+* myTunnel.dst_id     : EXACT     0001
+Action entry: MyIngress.myTunnel_forward - 01
+**********
+Dumping entry 0x1
+Match key:
+* myTunnel.dst_id     : EXACT     0002
+Action entry: MyIngress.myTunnel_forward - 02
+**********
+Dumping entry 0x2
+Match key:
+* myTunnel.dst_id     : EXACT     0003
+Action entry: MyIngress.myTunnel_forward - 03
+==========
+Dumping default entry
+Action entry: MyIngress.drop -
+==========
+mininet> $ sh ./p4cli s2 "table_modify MyIngress.myTunnel_exact MyIngress.myTunnel_forward 2 1"
+mininet> Done
+Modifying entry 2 for exact match table MyIngress.myTunnel_exact
+mininet> $ sh grep -c "Processing packet received" logs/s1.txt logs/s2.txt
+mininet> logs/s1.txt:2
+logs/s2.txt:2
+mininet> $ h1 python3 send.py 10.86.0.3 bounded-cycle --tunnel 3 --hops 4
+mininet> ###[ Ethernet ]###
+  dst       = ff:ff:ff:ff:ff:ff
+  src       = 00:00:00:00:00:01
+  type      = 0x1212
+###[ MyTunnel ]###
+     proto_id  = 2048
+     dst_id    = 3
+     hops_left = 4
+###[ IP ]###
+        version   = 4
+        ihl       = 5
+        tos       = 0x0
+        len       = 41
+        id        = 1
+        flags     =
+        frag      = 0
+        ttl       = 64
+        proto     = udp
+        chksum    = 0x6614
+        src       = 10.86.0.1
+        dst       = 10.86.0.3
+        \options   \
+###[ UDP ]###
+           sport     = 4321
+           dport     = 4321
+           len       = 21
+           chksum    = 0xfcfb
+###[ Raw ]###
+              load      = 'bounded-cycle'
+
+Sent from h1-eth0.
+mininet> $ sh sleep 1
+mininet> mininet> $ sh grep -c "Processing packet received" logs/s1.txt logs/s2.txt
+mininet> logs/s1.txt:7
+logs/s2.txt:6
+mininet> $ sh sleep 2
+mininet> mininet> $ sh grep -c "Processing packet received" logs/s1.txt logs/s2.txt
+mininet> logs/s1.txt:7
+logs/s2.txt:6
+mininet> *** Stopping 0 controllers
+
+*** Stopping 4 links
+....
+*** Stopping 2 switches
+s1 s2
+*** Stopping 3 hosts
+h1 h2 h3
+*** Done

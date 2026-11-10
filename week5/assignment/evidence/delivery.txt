@@ -1,0 +1,165 @@
+$ python3 topo.py --id 3186
+*** Compiling tunnel.p4
+*** Error setting resource limits. Mininet's performance may be affected.
+*** Configuring hosts
+h1 h2 h3
+*** Starting controller
+
+*** Starting 2 switches
+s1 s2
+*** s1: 6 table entries added
+*** s2: 6 table entries added
+*** Your hosts: h1 10.86.0.1, h2 10.86.0.2, h3 10.86.0.3
+*** Ready. Switch logs: logs/s1.txt, logs/s2.txt. What h2 and h3 receive: logs/h2.txt, logs/h3.txt
+*** Starting CLI:
+mininet> $ sh sleep 1
+mininet> mininet> $ h1 python3 send.py 10.86.0.3 exit-2-default --tunnel 2
+mininet> ###[ Ethernet ]###
+  dst       = ff:ff:ff:ff:ff:ff
+  src       = 00:00:00:00:00:01
+  type      = 0x1212
+###[ MyTunnel ]###
+     proto_id  = 2048
+     dst_id    = 2
+     hops_left = 8
+###[ IP ]###
+        version   = 4
+        ihl       = 5
+        tos       = 0x0
+        len       = 42
+        id        = 1
+        flags     =
+        frag      = 0
+        ttl       = 64
+        proto     = udp
+        chksum    = 0x6613
+        src       = 10.86.0.1
+        dst       = 10.86.0.3
+        \options   \
+###[ UDP ]###
+           sport     = 4321
+           dport     = 4321
+           len       = 22
+           chksum    = 0x6c7d
+###[ Raw ]###
+              load      = 'exit-2-default'
+
+Sent from h1-eth0.
+mininet> $ h1 python3 send.py 10.86.0.3 exit-3-last-hop --tunnel 3 --hops 2
+mininet> ###[ Ethernet ]###
+  dst       = ff:ff:ff:ff:ff:ff
+  src       = 00:00:00:00:00:01
+  type      = 0x1212
+###[ MyTunnel ]###
+     proto_id  = 2048
+     dst_id    = 3
+     hops_left = 2
+###[ IP ]###
+        version   = 4
+        ihl       = 5
+        tos       = 0x0
+        len       = 43
+        id        = 1
+        flags     =
+        frag      = 0
+        ttl       = 64
+        proto     = udp
+        chksum    = 0x6612
+        src       = 10.86.0.1
+        dst       = 10.86.0.3
+        \options   \
+###[ UDP ]###
+           sport     = 4321
+           dport     = 4321
+           len       = 23
+           chksum    = 0xf1b1
+###[ Raw ]###
+              load      = 'exit-3-last-hop'
+
+Sent from h1-eth0.
+mininet> $ h1 python3 send.py 10.86.0.3 zero-budget --tunnel 3 --hops 0
+mininet> ###[ Ethernet ]###
+  dst       = ff:ff:ff:ff:ff:ff
+  src       = 00:00:00:00:00:01
+  type      = 0x1212
+###[ MyTunnel ]###
+     proto_id  = 2048
+     dst_id    = 3
+     hops_left = 0
+###[ IP ]###
+        version   = 4
+        ihl       = 5
+        tos       = 0x0
+        len       = 39
+        id        = 1
+        flags     =
+        frag      = 0
+        ttl       = 64
+        proto     = udp
+        chksum    = 0x6616
+        src       = 10.86.0.1
+        dst       = 10.86.0.3
+        \options   \
+###[ UDP ]###
+           sport     = 4321
+           dport     = 4321
+           len       = 19
+           chksum    = 0x5e55
+###[ Raw ]###
+              load      = 'zero-budget'
+
+Sent from h1-eth0.
+mininet> $ h1 python3 send.py 10.86.0.3 one-hop-short --tunnel 3 --hops 1
+mininet> ###[ Ethernet ]###
+  dst       = ff:ff:ff:ff:ff:ff
+  src       = 00:00:00:00:00:01
+  type      = 0x1212
+###[ MyTunnel ]###
+     proto_id  = 2048
+     dst_id    = 3
+     hops_left = 1
+###[ IP ]###
+        version   = 4
+        ihl       = 5
+        tos       = 0x0
+        len       = 41
+        id        = 1
+        flags     =
+        frag      = 0
+        ttl       = 64
+        proto     = udp
+        chksum    = 0x6614
+        src       = 10.86.0.1
+        dst       = 10.86.0.3
+        \options   \
+###[ UDP ]###
+           sport     = 4321
+           dport     = 4321
+           len       = 21
+           chksum    = 0xc53e
+###[ Raw ]###
+              load      = 'one-hop-short'
+
+Sent from h1-eth0.
+mininet> $ h1 ping -c 2 -W 2 h3
+mininet> PING 10.86.0.3 (10.86.0.3) 56(84) bytes of data.
+64 bytes from 10.86.0.3: icmp_seq=1 ttl=62 time=6.18 ms
+64 bytes from 10.86.0.3: icmp_seq=2 ttl=62 time=5.35 ms
+
+--- 10.86.0.3 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1006ms
+rtt min/avg/max/mdev = 5.346/5.763/6.180/0.417 ms
+mininet> $ sh cat logs/h2.txt logs/h3.txt
+mininet> Listening on h2-eth0...
+Received (tunnelled, dst_id=2, hops_left=6) from 10.86.0.1 to 10.86.0.3, TTL 64: 'exit-2-default'
+Listening on h3-eth0...
+Received (tunnelled, dst_id=3, hops_left=0) from 10.86.0.1 to 10.86.0.3, TTL 64: 'exit-3-last-hop'
+mininet> *** Stopping 0 controllers
+
+*** Stopping 4 links
+....
+*** Stopping 2 switches
+s1 s2
+*** Stopping 3 hosts
+h1 h2 h3
+*** Done

@@ -1,0 +1,93 @@
+$ python3 topo.py --id 3186
+*** Compiling tunnel.p4
+*** Error setting resource limits. Mininet's performance may be affected.
+*** Configuring hosts
+h1 h2 h3
+*** Starting controller
+
+*** Starting 2 switches
+s1 s2
+*** s1: 6 table entries added
+*** s2: 6 table entries added
+*** Your hosts: h1 10.86.0.1, h2 10.86.0.2, h3 10.86.0.3
+*** Ready. Switch logs: logs/s1.txt, logs/s2.txt. What h2 and h3 receive: logs/h2.txt, logs/h3.txt
+*** Starting CLI:
+mininet> $ sh sleep 1
+mininet> mininet> $ sh ./p4cli s2 table_dump MyIngress.myTunnel_exact
+mininet> Done
+==========
+TABLE ENTRIES
+**********
+Dumping entry 0x0
+Match key:
+* myTunnel.dst_id     : EXACT     0001
+Action entry: MyIngress.myTunnel_forward - 01
+**********
+Dumping entry 0x1
+Match key:
+* myTunnel.dst_id     : EXACT     0002
+Action entry: MyIngress.myTunnel_forward - 02
+**********
+Dumping entry 0x2
+Match key:
+* myTunnel.dst_id     : EXACT     0003
+Action entry: MyIngress.myTunnel_forward - 03
+==========
+Dumping default entry
+Action entry: MyIngress.drop -
+==========
+mininet> $ sh ./p4cli s2 "table_modify MyIngress.myTunnel_exact MyIngress.myTunnel_forward 2 1"
+mininet> Done
+Modifying entry 2 for exact match table MyIngress.myTunnel_exact
+mininet> $ sh grep -c "Processing packet received" logs/s1.txt logs/s2.txt
+mininet> logs/s1.txt:8
+logs/s2.txt:7
+mininet> $ h1 python3 send.py 10.86.0.3 bounded-cycle --tunnel 3 --hops 4
+mininet> ###[ Ethernet ]###
+  dst       = ff:ff:ff:ff:ff:ff
+  src       = 00:00:00:00:00:01
+  type      = 0x1212
+###[ MyTunnel ]###
+     proto_id  = 2048
+     dst_id    = 3
+     hops_left = 4
+###[ IP ]###
+        version   = 4
+        ihl       = 5
+        tos       = 0x0
+        len       = 41
+        id        = 1
+        flags     =
+        frag      = 0
+        ttl       = 64
+        proto     = udp
+        chksum    = 0x6614
+        src       = 10.86.0.1
+        dst       = 10.86.0.3
+        \options   \
+###[ UDP ]###
+           sport     = 4321
+           dport     = 4321
+           len       = 21
+           chksum    = 0xfcfb
+###[ Raw ]###
+              load      = 'bounded-cycle'
+
+Sent from h1-eth0.
+mininet> $ sh sleep 1
+mininet> mininet> $ sh grep -c "Processing packet received" logs/s1.txt logs/s2.txt
+mininet> logs/s1.txt:11
+logs/s2.txt:9
+mininet> $ sh sleep 2
+mininet> mininet> $ sh grep -c "Processing packet received" logs/s1.txt logs/s2.txt
+mininet> logs/s1.txt:11
+logs/s2.txt:9
+mininet> *** Stopping 0 controllers
+
+*** Stopping 4 links
+....
+*** Stopping 2 switches
+s1 s2
+*** Stopping 3 hosts
+h1 h2 h3
+*** Done

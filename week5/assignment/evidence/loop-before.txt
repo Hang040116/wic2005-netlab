@@ -1,0 +1,8 @@
+Offline forwarding model — no packets were sent and no BMv2 counts were collected.
+Input: inner destination 10.86.0.3, tunnel exit 3, v1 header without a hop field.
+Starter table: s1 port 2 leads to s2, s2 port 3 leads to h3.
+Model scenario: exit 3 on both switches leads to the other switch.
+Modeled switch visits: s1 -> s2 -> s1 -> s2 -> s1 -> s2 -> s1 -> s2 -> s1 -> s2 -> s1 -> s2
+Modeled visits after 4 transitions: s1=2, s2=2
+Modeled visits after 12 transitions: s1=6, s2=6
+The same state repeats after two transitions. The model stops at its 12-step cap.
