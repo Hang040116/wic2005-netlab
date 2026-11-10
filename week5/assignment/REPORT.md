@@ -4,7 +4,9 @@ Student ID (last four digits): **3186**. The lab uses `10.86.0.0/24`.
 
 ## 1. Analysis: the loop
 
-A tunnel packet for exit 3 is forwarded by its tunnel ID. If s1 and s2 both point that exit to each other, the next-hop sequence repeats s1 → s2 → s1. The original ingress never changes a field that could end this sequence. The bounded forwarding model in [loop-before.txt](evidence/loop-before.txt) tracks the repeating state without starting an unbounded packet loop. Both modeled counts rise from 2 at step 4 to 6 at step 12. These are model counts, separate from the switch logs in the later sections.
+A tunnel packet for exit 3 is forwarded by its tunnel ID. If s1 and s2 both point that exit to each other, the next-hop sequence repeats s1 → s2 → s1. The original ingress has no hop field to end the sequence.
+
+I measured the original P4 program in BMv2 using two independent forward-only paths. Each path expands the alternating switch roles into a fixed number of stages, all running the same `tunnel_v1.p4`. The [BMv2 transcript](evidence/loop-before.txt) shows one logged arrival per stage: two per role on the four-stage path and six per role on the twelve-stage path. In both runs, the sink captured one 61-byte frame identical to the input. Thus the legacy pipeline forwarded the packet at every tested stage without changing its bytes. These are stage counts from two finite runs, rather than time samples from a live two-switch loop. The [measurement script](verify_c1.py) reproduces both runs.
 
 The plain IPv4 path has a separate issue. In the baseline, `ipv4_forward` selects the egress port and subtracts one from an unsigned eight-bit TTL. There is no guard to discard a packet at TTL 1 or 0. It can forward with TTL 0, then wrap from 0 to 255 on the next pass. The checksum is recomputed, so the TTL change itself does not invalidate the packet. This patch leaves the plain IPv4 path as supplied.
 
@@ -68,7 +70,7 @@ The change adds one byte to every tunnel frame and consumes eight bits of header
 
 | File | Evidence type |
 | --- | --- |
-| [loop-before.txt](evidence/loop-before.txt) | Bounded offline model of the original forwarding state |
+| [loop-before.txt](evidence/loop-before.txt) | BMv2 counters and byte comparison on two finite paths with the original program |
 | [delivery.txt](evidence/delivery.txt) | BMv2 tunnel and IPv4 delivery, including budget boundaries |
 | [loop-after.txt](evidence/loop-after.txt) | BMv2 switch counters for the bounded cycle |
 | [mixed.txt](evidence/mixed.txt) | BMv2 parser trace, capture bytes, receiver output, and switch counters |
