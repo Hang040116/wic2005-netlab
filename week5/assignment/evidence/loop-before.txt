@@ -1,0 +1,63 @@
+Ran from week5/ with the course Docker image.
+$ docker run --rm --platform linux/amd64 --network none --privileged -v "$PWD:/lab:ro" -w /lab ghcr.io/firdaussahran/p4-lab:1.0 python3 -u assignment/verify_c1.py --id 3186
+
+Bounded BMv2 measurement: independent forward-only paths; no live cycle.
+
+=== 4 forwarding stages ===
+*** Compiling /lab/tunnel_v1.p4
+*** Error setting resource limits. Mininet's performance may be affected.
+*** Configuring hosts
+h1 h3
+*** Starting controller
+
+*** Starting 4 switches
+p1 p2 p3 p4
+Sent one legacy tunnel frame from 10.86.0.1 to 10.86.0.3, exit ID 3.
+p1 (s1 role): 1 logged arrival
+p2 (s2 role): 1 logged arrival
+p3 (s1 role): 1 logged arrival
+p4 (s2 role): 1 logged arrival
+Measured totals: 2 s1-role arrivals, 2 s2-role arrivals.
+Sink captured exactly one byte-identical frame (61 bytes).
+*** Stopping 0 controllers
+
+*** Stopping 5 links
+.....
+*** Stopping 4 switches
+p1 p2 p3 p4
+*** Stopping 2 hosts
+h1 h3
+*** Done
+
+=== 12 forwarding stages ===
+*** Compiling /lab/tunnel_v1.p4
+*** Configuring hosts
+h1 h3
+*** Starting controller
+
+*** Starting 12 switches
+p1 p2 p3 p4 p5 p6 p7 p8 p9 p10 p11 p12
+Sent one legacy tunnel frame from 10.86.0.1 to 10.86.0.3, exit ID 3.
+p1 (s1 role): 1 logged arrival
+p2 (s2 role): 1 logged arrival
+p3 (s1 role): 1 logged arrival
+p4 (s2 role): 1 logged arrival
+p5 (s1 role): 1 logged arrival
+p6 (s2 role): 1 logged arrival
+p7 (s1 role): 1 logged arrival
+p8 (s2 role): 1 logged arrival
+p9 (s1 role): 1 logged arrival
+p10 (s2 role): 1 logged arrival
+p11 (s1 role): 1 logged arrival
+p12 (s2 role): 1 logged arrival
+Measured totals: 6 s1-role arrivals, 6 s2-role arrivals.
+Sink captured exactly one byte-identical frame (61 bytes).
+*** Stopping 0 controllers
+
+*** Stopping 13 links
+.............
+*** Stopping 12 switches
+p1 p2 p3 p4 p5 p6 p7 p8 p9 p10 p11 p12
+*** Stopping 2 hosts
+h1 h3
+*** Done
