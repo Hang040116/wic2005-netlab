@@ -1,0 +1,29 @@
+name: Compile tunnel.p4
+
+on:
+  push:
+    paths:
+      - "week5/**"
+      - ".github/workflows/compile-week5.yml"
+  pull_request:
+    paths:
+      - "week5/**"
+      - ".github/workflows/compile-week5.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    container: ghcr.io/firdaussahran/p4-lab:1.0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Compile tunnel.p4
+        working-directory: week5
+        run: |
+          mkdir -p build
+          p4c-bm2-ss -o build/tunnel.json tunnel.p4
+          p4c-bm2-ss -o build/tunnel_v1.json tunnel_v1.p4

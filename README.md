@@ -1,6 +1,6 @@
 # WIC2005 Programmable Networks lab portfolio
 
-This repository holds the Week 2 and Week 3 assignments for student ID suffix 3186. The full student ID is not stored here.
+This repository holds the Week 2, Week 3, and Week 5 assignments for student ID suffix 3186. The full student ID is not stored here.
 
 ## Week 2: network from data
 
@@ -27,3 +27,7 @@ python3 make_page3.py network.yaml
 
 `loop.yaml` and `missing.yaml` are negative cases. The outputs in `evidence3/check.txt` show that both fail before the network is built. The other files in `evidence3/` record live routing tables, traces, summary lookups, and a link failure.
 
+
+## Week 5: P4 tunnel hop limit
+
+The [Week 5 lab](week5/) adds a hop budget to the P4 tunnel header and checks forwarding on BMv2. The [report](week5/assignment/REPORT.md) includes delivery results, a bounded cycle, and the effects of running old and new switch programs together.
